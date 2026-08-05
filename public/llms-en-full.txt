@@ -1,0 +1,126 @@
+# AI Watchdog — Full Documentation (English)
+
+## Product Definition
+
+AI Watchdog is a VS Code extension that monitors the working state of AI coding tools and notifies developers to take over in a timely manner.
+
+It belongs to the developer-tools category. The core problem it solves: when AI coding assistants (such as Copilot Chat, Cline) are automatically writing code, developers often switch away to do other things — and they don't know when the AI finishes, whether it hit a problem, or whether human intervention is needed. AI Watchdog uses file-change monitoring and a state machine to automatically detect the AI's working state and notifies the developer at the right moment.
+
+## How It Works
+
+### 1. File Change Monitoring
+
+AI Watchdog listens to file changes in the workspace via VS Code's filesystem API. By default it monitors:
+- TypeScript / JavaScript (.ts, .tsx, .js, .jsx)
+- Python (.py)
+- Go (.go)
+- Rust (.rs)
+- Java (.java)
+- Vue (.vue)
+- Styles (.css, .scss, .html)
+- Config & docs (.json, .md, .yaml, .yml, .toml)
+
+It ignores node_modules, .git, dist, build, .next, coverage, __pycache__, target directories by default.
+
+### 2. Sliding-Window State Detection
+
+The core detection mechanism is a sliding-window counter:
+- Within a time window (default 3 seconds), if file changes reach a threshold (default 3), the AI is judged "working"
+- When AI activity stops beyond a silence timeout (default 8 seconds), it is judged "done" and a notification fires
+
+All thresholds are configurable via the VS Code settings panel:
+- aiWatchdog.silenceTimeout (3-60 seconds)
+- aiWatchdog.activityThreshold (2-20 changes)
+- aiWatchdog.windowSize (1-10 seconds)
+
+### 3. Multi-Channel Notifications
+
+When the AI state transitions to "done", AI Watchdog notifies via three channels:
+- Sound alert: configurable volume (0-1)
+- Desktop system notification: triggered when VS Code is not in the foreground, using OS-native notifications
+- Status bar icon: reflects the current AI working state in real time
+
+### 4. One-Click Takeover
+
+After receiving a notification, the developer can:
+- Click the desktop notification
+- Run the "AI Watchdog: Take Over" command
+
+The system automatically locates the most recently modified file and position, and jumps to the AI chat panel so the developer can resume work quickly.
+
+## Monitored Tools
+
+- GitHub Copilot Chat: monitors activity in the VS Code Copilot Chat panel
+- Cline / Roo Code: monitors file operations by the Cline or Roo Code extension
+- Terminal output: monitors integrated terminal output changes
+
+Each monitor can be toggled independently.
+
+## Privacy & Security
+
+AI Watchdog runs entirely locally:
+- No telemetry data collected
+- No file contents or paths uploaded
+- No network communication (except the VS Code marketplace installation)
+- All state detection and notifications happen on the local machine
+
+## Configuration
+
+| Setting | Default | Range | Description |
+|---------|---------|-------|-------------|
+| aiWatchdog.enabled | true | boolean | Enable/disable monitoring |
+| aiWatchdog.silenceTimeout | 8 | 3-60s | Wait time before judging AI done |
+| aiWatchdog.activityThreshold | 3 | 2-20 | Changes in window to trigger "working" |
+| aiWatchdog.windowSize | 3 | 1-10s | Sliding window size |
+| aiWatchdog.sound.enabled | true | boolean | Enable sound alert |
+| aiWatchdog.sound.volume | 0.7 | 0-1 | Sound volume |
+| aiWatchdog.desktopNotify.enabled | true | boolean | Enable desktop notification |
+| aiWatchdog.watchPatterns | [default] | array | File patterns to watch |
+| aiWatchdog.ignorePatterns | [default] | array | File patterns to ignore |
+| aiWatchdog.monitors.copilot | true | boolean | Enable Copilot Chat monitor |
+| aiWatchdog.monitors.cline | true | boolean | Enable Cline monitor |
+| aiWatchdog.monitors.terminal | true | boolean | Enable terminal monitor |
+
+## Installation
+
+### Option 1: Marketplace
+1. Open VS Code
+2. Go to Extensions (Ctrl+Shift+X / Cmd+Shift+X)
+3. Search "AI Watchdog"
+4. Click Install
+
+### Option 2: Command Line
+```
+code --install-extension ai-watchdog.ai-watchdog
+```
+
+### Option 3: Manual
+1. Download .vsix from GitHub Releases
+2. Extensions panel → ... → Install from VSIX
+3. Select the downloaded file
+
+## FAQ
+
+Q: Which AI coding tools does AI Watchdog monitor?
+A: It currently monitors GitHub Copilot Chat, Cline / Roo Code, and terminal output. Each monitor can be toggled independently, and you can customize file watch patterns and ignore rules.
+
+Q: Does it collect or upload my data?
+A: No. AI Watchdog runs entirely locally. All file-change monitoring, state detection, and notifications happen on your machine — nothing is collected or uploaded.
+
+Q: How does it detect whether the AI is working or done?
+A: Via a sliding-window mechanism: if file changes reach a threshold (default 3) within a time window (default 3 seconds), the AI is judged "working". When activity stops beyond a silence timeout (default 8 seconds), it is judged "done" and a notification fires.
+
+Q: What notification channels are available?
+A: Three channels: sound alert (with adjustable volume), desktop system notification (triggered when VS Code is not in the foreground), and status bar icon. Each channel can be toggled independently.
+
+Q: Which file types are monitored?
+A: By default it monitors TS/JS/Python/Go/Rust/Java/Vue/CSS/HTML/JSON/Markdown/YAML/TOML and other popular code files. You can customize the scope via aiWatchdog.watchPatterns.
+
+Q: How do I install it?
+A: Three options: 1) Search "AI Watchdog" in the VS Code Extensions marketplace; 2) Install via command line: code --install-extension ai-watchdog.ai-watchdog; 3) Download the .vsix from GitHub Releases and install manually.
+
+Q: Will it impact editor performance?
+A: No. AI Watchdog uses lightweight filesystem watchers and sliding-window counting with minimal memory and CPU usage. ignorePatterns excludes node_modules, dist, .git and similar directories by default to avoid unnecessary overhead.
+
+Q: What is "one-click takeover"?
+A: When you receive a notification, clicking it or running the "AI Watchdog: Take Over" command automatically locates the most recently modified file and position, and jumps to the AI chat panel so you can resume work quickly.

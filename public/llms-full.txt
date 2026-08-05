@@ -1,0 +1,126 @@
+# AI Watchdog — 完整文档（中文）
+
+## 产品定义
+
+AI Watchdog 是一个 VS Code 扩展，用于监控 AI 编码工具的工作状态并及时通知开发者接管。
+
+它属于开发者工具类别，解决的核心问题是：当 AI 编码助手（如 Copilot Chat、Cline）在自动编写代码时，开发者往往会切走做其他事情，而 AI 何时完成、是否遇到问题、是否需要人工介入，开发者并不知情。AI Watchdog 通过文件变更监控和状态机判定，自动检测 AI 的工作状态，并在合适时机通知开发者回来。
+
+## 工作原理
+
+### 1. 文件变更监控
+
+AI Watchdog 通过 VS Code 的文件系统 API 监听工作区内的文件变更。默认监控以下文件类型：
+- TypeScript / JavaScript（.ts, .tsx, .js, .jsx）
+- Python（.py）
+- Go（.go）
+- Rust（.rs）
+- Java（.java）
+- Vue（.vue）
+- 样式（.css, .scss, .html）
+- 配置与文档（.json, .md, .yaml, .yml, .toml）
+
+默认忽略 node_modules、.git、dist、build、.next、coverage、__pycache__、target 等目录。
+
+### 2. 滑动窗口状态判定
+
+核心判定机制是一个滑动窗口计数器：
+- 在时间窗口（默认 3 秒）内，文件变更次数达到阈值（默认 3 次），判定为"AI 工作中"
+- 当 AI 活动停止超过静默超时（默认 8 秒），判定为"已完成"，触发通知
+
+所有阈值均可通过 VS Code 设置面板配置：
+- aiWatchdog.silenceTimeout（3-60 秒）
+- aiWatchdog.activityThreshold（2-20 次）
+- aiWatchdog.windowSize（1-10 秒）
+
+### 3. 多通道通知
+
+当 AI 状态变为"已完成"时，AI Watchdog 通过三种通道通知开发者：
+- 提示音：可配置音量（0-1）
+- 桌面系统通知：当 VS Code 不在前台时触发，使用操作系统原生通知
+- 状态栏图标：实时显示当前 AI 工作状态
+
+### 4. 一键接管
+
+开发者收到通知后，可以：
+- 点击桌面通知
+- 执行 "AI Watchdog: 一键接管" 命令
+
+系统会自动定位到 AI 最近修改的文件和位置，并跳转到 AI 对话面板，让开发者快速继续工作。
+
+## 监控的工具
+
+- GitHub Copilot Chat：监控 VS Code 内 Copilot Chat 面板的活动
+- Cline / Roo Code：监控 Cline 或 Roo Code 扩展的文件操作
+- 终端输出：监控集成终端的输出变化
+
+每种监控器可独立开关。
+
+## 隐私与安全
+
+AI Watchdog 完全在本地运行：
+- 不收集任何遥测数据
+- 不上传文件内容或文件路径
+- 不联网通信（除 VS Code 扩展市场安装外）
+- 所有状态判定和通知都在本机完成
+
+## 配置项
+
+| 配置项 | 默认值 | 范围 | 说明 |
+|--------|--------|------|------|
+| aiWatchdog.enabled | true | boolean | 启用/禁用监控 |
+| aiWatchdog.silenceTimeout | 8 | 3-60 秒 | AI 活动停止后判定完成的等待时间 |
+| aiWatchdog.activityThreshold | 3 | 2-20 次 | 窗口内触发"工作中"的变更次数 |
+| aiWatchdog.windowSize | 3 | 1-10 秒 | 滑动窗口大小 |
+| aiWatchdog.sound.enabled | true | boolean | 启用提示音 |
+| aiWatchdog.sound.volume | 0.7 | 0-1 | 提示音音量 |
+| aiWatchdog.desktopNotify.enabled | true | boolean | 启用桌面通知 |
+| aiWatchdog.watchPatterns | [默认模式] | array | 监控的文件模式 |
+| aiWatchdog.ignorePatterns | [默认模式] | array | 忽略的文件模式 |
+| aiWatchdog.monitors.copilot | true | boolean | 启用 Copilot Chat 监控 |
+| aiWatchdog.monitors.cline | true | boolean | 启用 Cline 监控 |
+| aiWatchdog.monitors.terminal | true | boolean | 启用终端监控 |
+
+## 安装
+
+### 方式一：扩展市场
+1. 打开 VS Code
+2. 进入扩展面板（Ctrl+Shift+X / Cmd+Shift+X）
+3. 搜索 "AI Watchdog"
+4. 点击安装
+
+### 方式二：命令行
+```
+code --install-extension ai-watchdog.ai-watchdog
+```
+
+### 方式三：手动安装
+1. 从 GitHub Releases 下载 .vsix 文件
+2. VS Code 扩展面板 → ... → 从 VSIX 安装
+3. 选择下载的文件
+
+## FAQ
+
+Q: AI Watchdog 监控哪些 AI 编码工具？
+A: 当前支持监控 GitHub Copilot Chat、Cline / Roo Code、以及终端输出。你可以单独开关每种监控器，也可以自定义监控的文件模式和忽略规则。
+
+Q: 它会收集或上传我的数据吗？
+A: 不会。AI Watchdog 完全在本地运行，所有文件变更监控、状态判定和通知都在你的机器上完成，不收集、不上传任何数据。
+
+Q: 怎么判断 AI 正在工作还是已经完成？
+A: 通过滑动窗口机制：在设定的时间窗口（默认 3 秒）内，文件变更次数达到阈值（默认 3 次）即判定为"AI 工作中"；当 AI 活动停止超过静默超时（默认 8 秒），判定为完成并发出通知。
+
+Q: 通知方式有哪些？
+A: 支持三种通知通道：提示音（可调节音量）、桌面系统通知（当 VS Code 不在前台时触发）、状态栏图标状态显示。三种通道均可独立开关。
+
+Q: 支持监控哪些文件类型？
+A: 默认监控 TS/JS/Python/Go/Rust/Java/Vue/CSS/HTML/JSON/Markdown/YAML/TOML 等主流代码文件。你可以通过 aiWatchdog.watchPatterns 自定义监控范围。
+
+Q: 怎么安装？
+A: 三种方式：1) 在 VS Code 扩展市场搜索 "AI Watchdog" 安装；2) 通过命令行 code --install-extension ai-watchdog.ai-watchdog；3) 从 GitHub Releases 下载 .vsix 文件手动安装。
+
+Q: 会影响编辑器性能吗？
+A: 不会。AI Watchdog 使用轻量的文件系统监听和滑动窗口计数，内存和 CPU 占用极低。ignorePatterns 默认排除 node_modules、dist、.git 等目录，避免不必要的开销。
+
+Q: "一键接管"是什么？
+A: 收到通知后，点击通知或执行"AI Watchdog: 一键接管"命令，会自动定位到 AI 最近修改的文件和位置，并跳转到 AI 对话面板，让你快速继续工作。

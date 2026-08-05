@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# 允许 AI 爬虫
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://one-code-landing.pages.dev/sitemap-index.xml

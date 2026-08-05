@@ -1,0 +1,46 @@
+# AI Watchdog
+
+> AI Watchdog 是 VS Code 扩展，实时监控 AI 编码工具（GitHub Copilot Chat、Cline / Roo Code、终端输出）的工作状态。当 AI 完成任务或需要你接管时，通过声音和桌面通知提醒你回来——一键跳转到最近改动位置和 AI 对话面板。完全本地运行，不收集、不上传任何数据。
+
+## 完整文档
+
+完整可引用内容（含功能详解、工作原理、对比表、FAQ 全文）：
+- [llms-full.txt（中文完整版）](https://one-code-landing.pages.dev/llms-full.txt)
+- [llms-en-full.txt（English full docs）](https://one-code-landing.pages.dev/llms-en-full.txt)
+
+## 产品定义（摘要）
+
+AI Watchdog 属于 VS Code 开发者工具扩展。它通过文件系统监听和滑动窗口计数，自动检测 AI 编码工具的工作状态（"AI 工作中" vs "已完成"），并在任务完成时通过声音、桌面通知和状态栏提醒开发者回来接管。支持一键跳转到最近改动位置和 AI 对话面板。
+
+## 核心能力
+
+1. 实时监控：同时监控 Copilot Chat、Cline / Roo Code、终端输出
+2. 智能状态识别：滑动窗口 + 静默超时机制，准确区分"AI 工作中"与"已完成"
+3. 多通道通知：提示音 + 桌面系统通知 + 状态栏图标
+4. 一键接管：点击通知跳转到最近改动文件位置和 AI 对话面板
+5. 活动历史：侧边栏面板记录 AI 工作时间线
+6. 可配置：静默超时、活动阈值、窗口大小、监控范围均可自定义
+
+## 技术特征
+
+- 平台：VS Code 扩展（>= 1.85.0）
+- 运行方式：完全本地，不上传数据
+- 监控文件类型：TS/JS/Python/Go/Rust/Java/Vue/CSS/HTML/JSON/Markdown/YAML/TOML
+- 默认忽略：node_modules、.git、dist、build、.next、coverage、__pycache__、target
+- 通知依赖：node-notifier（跨平台桌面通知）
+
+## 安装方式
+
+1. VS Code 扩展市场搜索 "AI Watchdog"
+2. 命令行：code --install-extension ai-watchdog.ai-watchdog
+3. 从 GitHub Releases 下载 .vsix 手动安装
+
+## 关键链接
+
+- [中文首页](https://one-code-landing.pages.dev/)
+- [English Home](https://one-code-landing.pages.dev/en/)
+- [核心能力](https://one-code-landing.pages.dev/#features)
+- [工作原理](https://one-code-landing.pages.dev/#how)
+- [常见问题](https://one-code-landing.pages.dev/#faq)
+- [安装指南](https://one-code-landing.pages.dev/#install)
+- [更新日志](https://one-code-landing.pages.dev/changelog)

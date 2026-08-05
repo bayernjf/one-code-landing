@@ -1,0 +1,46 @@
+# AI Watchdog
+
+> AI Watchdog is a VS Code extension that monitors AI coding agents (GitHub Copilot Chat, Cline / Roo Code, terminal output) in real time. When the AI finishes or needs you to take over, it notifies you via sound and desktop notifications — one click jumps you to the latest changes and the AI chat panel. Fully local, no data collection or upload.
+
+## Full Documentation
+
+Complete citable content (features, how it works, comparison, full FAQ):
+- [llms-full.txt (Chinese full docs)](https://one-code-landing.pages.dev/llms-full.txt)
+- [llms-en-full.txt (English full docs)](https://one-code-landing.pages.dev/llms-en-full.txt)
+
+## Product Definition (Summary)
+
+AI Watchdog is a VS Code developer-tool extension. It uses filesystem watching and sliding-window counting to automatically detect the working state of AI coding tools ("AI working" vs "done") and notifies the developer to take over when a task completes. Supports one-click jump to the latest file changes and the AI chat panel.
+
+## Core Features
+
+1. Real-time monitoring: simultaneously monitors Copilot Chat, Cline / Roo Code, and terminal output
+2. Smart state detection: sliding-window + silence-timeout mechanism accurately distinguishes "AI working" from "done"
+3. Multi-channel alerts: sound + desktop notification + status bar icon
+4. One-click takeover: click notification to jump to latest changes and AI chat panel
+5. Activity history: sidebar panel records the AI work timeline
+6. Configurable: silence timeout, activity threshold, window size, and watch scope are all customizable
+
+## Technical Details
+
+- Platform: VS Code extension (>= 1.85.0)
+- Runtime: fully local, no data upload
+- Monitored file types: TS/JS/Python/Go/Rust/Java/Vue/CSS/HTML/JSON/Markdown/YAML/TOML
+- Default ignores: node_modules, .git, dist, build, .next, coverage, __pycache__, target
+- Notification dependency: node-notifier (cross-platform desktop notifications)
+
+## Installation
+
+1. Search "AI Watchdog" in the VS Code Extensions marketplace
+2. Command line: code --install-extension ai-watchdog.ai-watchdog
+3. Download .vsix from GitHub Releases and install manually
+
+## Key Links
+
+- [Chinese Home](https://one-code-landing.pages.dev/)
+- [English Home](https://one-code-landing.pages.dev/en/)
+- [Features](https://one-code-landing.pages.dev/#features)
+- [How It Works](https://one-code-landing.pages.dev/#how)
+- [FAQ](https://one-code-landing.pages.dev/#faq)
+- [Install Guide](https://one-code-landing.pages.dev/#install)
+- [Changelog](https://one-code-landing.pages.dev/en/changelog)
