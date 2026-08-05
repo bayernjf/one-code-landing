@@ -1,0 +1,80 @@
+---
+import { useTranslations, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const rows = lang === 'zh' ? [
+  { label: '自动检测 AI 工作状态', a: true, b: false, c: false },
+  { label: '任务完成时主动通知', a: true, b: false, c: false },
+  { label: '桌面通知（编辑器不在前台）', a: true, b: false, c: false },
+  { label: '声音提示', a: true, b: false, c: true },
+  { label: '一键跳转最近改动', a: true, b: false, c: false },
+  { label: '活动历史时间线', a: true, b: false, c: false },
+  { label: '完全本地、不上传数据', a: true, b: true, c: true },
+  { label: '可配置监控范围与阈值', a: true, b: false, c: false },
+] : [
+  { label: 'Auto-detect AI working state', a: true, b: false, c: false },
+  { label: 'Proactive notification on completion', a: true, b: false, c: false },
+  { label: 'Desktop notification (editor in background)', a: true, b: false, c: false },
+  { label: 'Sound alert', a: true, b: false, c: true },
+  { label: 'One-click jump to latest changes', a: true, b: false, c: false },
+  { label: 'Activity history timeline', a: true, b: false, c: false },
+  { label: 'Fully local, no data upload', a: true, b: true, c: true },
+  { label: 'Configurable scope and thresholds', a: true, b: false, c: false },
+];
+
+const headers = lang === 'zh'
+  ? ['', 'AI Watchdog', '手动检查', '通用通知插件']
+  : ['', 'AI Watchdog', 'Manual Check', 'Generic Notify Plugin'];
+---
+
+<section id="compare" class="mx-auto max-w-5xl px-4 py-20 sm:px-6">
+  <div class="mx-auto max-w-2xl text-center">
+    <h2 class="text-3xl font-bold tracking-tight text-ink-50 sm:text-4xl">{t('compare.title')}</h2>
+    <p class="mt-3 text-base text-ink-400">{t('compare.subtitle')}</p>
+  </div>
+
+  <div class="mt-12 overflow-x-auto">
+    <table class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-b border-ink-800">
+          {headers.map((h, i) => (
+            <th class={`px-4 py-3 text-left ${i === 1 ? 'text-brand-400' : 'text-ink-400'}`}>{h}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr class="border-b border-ink-800/50">
+            <td class="px-4 py-3 text-ink-200">{r.label}</td>
+            <td class="px-4 py-3 text-center">
+              {r.a ? (
+                <span class="inline-block text-brand-400">&#10003;</span>
+              ) : (
+                <span class="inline-block text-ink-600">&#10007;</span>
+              )}
+            </td>
+            <td class="px-4 py-3 text-center">
+              {r.b ? (
+                <span class="inline-block text-brand-400">&#10003;</span>
+              ) : (
+                <span class="inline-block text-ink-600">&#10007;</span>
+              )}
+            </td>
+            <td class="px-4 py-3 text-center">
+              {r.c ? (
+                <span class="inline-block text-brand-400">&#10003;</span>
+              ) : (
+                <span class="inline-block text-ink-600">&#10007;</span>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,0 +1,40 @@
+---
+import { useTranslations, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const steps = lang === 'zh' ? [
+  { num: '01', title: '文件变更监控', desc: 'AI Watchdog 监听工作区文件变更，通过可配置的 watchPatterns 和 ignorePatterns 精确控制监控范围。' },
+  { num: '02', title: '滑动窗口判定', desc: '在时间窗口内统计文件变更次数，达到阈值即判定为"AI 工作中"，状态栏图标实时反映状态。' },
+  { num: '03', title: '静默超时检测', desc: '当 AI 活动停止超过设定的静默超时（默认 8 秒），判定任务完成，触发通知。' },
+  { num: '04', title: '通知与接管', desc: '通过声音和桌面通知提醒你回来。点击通知一键跳转到最近改动位置和 AI 对话面板。' },
+] : [
+  { num: '01', title: 'File Change Watch', desc: 'AI Watchdog listens to workspace file changes, with configurable watchPatterns and ignorePatterns for precise scope control.' },
+  { num: '02', title: 'Sliding Window Detection', desc: 'Counts file changes within a time window; reaching the threshold marks "AI working". The status bar icon reflects state in real time.' },
+  { num: '03', title: 'Silence Timeout', desc: 'When AI activity stops beyond the silence timeout (default 8s), the task is judged complete and a notification fires.' },
+  { num: '04', title: 'Notify & Take Over', desc: 'Sound and desktop notifications bring you back. Click to jump to the latest changes and the AI chat panel.' },
+];
+---
+
+<section id="how" class="border-y border-ink-800/60 bg-ink-900/30">
+  <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 class="text-3xl font-bold tracking-tight text-ink-50 sm:text-4xl">{t('how.title')}</h2>
+      <p class="mt-3 text-base text-ink-400">{t('how.subtitle')}</p>
+    </div>
+
+    <div class="mt-12 grid gap-8 md:grid-cols-4">
+      {steps.map((s) => (
+        <div class="relative">
+          <span class="font-mono text-3xl font-bold text-brand-500/30">{s.num}</span>
+          <h3 class="mt-2 text-lg font-semibold text-ink-50">{s.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-400">{s.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
