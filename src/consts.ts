@@ -15,7 +15,7 @@ export const DEFAULT_LOCALE = 'zh';
 
 // 社交与外部链接（部署后替换为实际仓库地址）
 export const SOCIAL = {
-  github: 'https://github.com/your-org/one-code',
+  github: 'https://github.com/bayernjf/one-code',
   marketplace: 'https://marketplace.visualstudio.com/items?itemName=ai-watchdog.ai-watchdog',
   email: 'hello@one-code.dev',
 };
