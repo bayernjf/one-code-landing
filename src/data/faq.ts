@@ -41,7 +41,7 @@ export const faqItems = {
     },
     {
       question: 'Does it collect or upload my data?',
-      answer: 'No. AI Watchdog runs entirely locally. All file-change monitoring, state detection, and notifications happen on your machine — nothing is collected or uploaded.',
+      answer: 'No. AI Watchdog runs entirely locally. All file-change monitoring, state detection, and notifications happen on your machine; nothing is collected or uploaded.',
     },
     {
       question: 'How does it detect whether the AI is working or done?',
