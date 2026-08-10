@@ -11,7 +11,7 @@ export const SITE_DESCRIPTION_EN =
   'AI Watchdog is a VS Code extension that monitors your AI coding agents (Copilot Chat, Cline, terminal) in real time and notifies you to take over when work is done or intervention is needed. Sound + desktop notifications + status bar, one-click jump back.';
 export const AUTHOR = 'AI Watchdog';
 export const LOCALES = ['zh', 'en'] as const;
-export const DEFAULT_LOCALE = 'zh';
+export const DEFAULT_LOCALE = 'en';
 
 // 社交与外部链接（部署后替换为实际仓库地址）
 export const SOCIAL = {

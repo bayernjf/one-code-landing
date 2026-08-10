@@ -4,7 +4,7 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { useTranslations, type Lang } from '../../i18n';
 
-const lang: Lang = 'en';
+const lang: Lang = 'zh';
 const t = useTranslations(lang);
 
 const releases = [
@@ -12,12 +12,12 @@ const releases = [
     version: '0.1.0',
     date: '2026-08-05',
     notes: [
-      'Initial release: monitor Copilot Chat, Cline / Roo Code, terminal output',
-      'Sliding-window + silence-timeout state machine',
-      'Sound + desktop notification + status bar triple-channel alerts',
-      'One-click takeover: jump to latest changes + AI chat panel',
-      'Activity history sidebar panel',
-      'Configurable watchPatterns / ignorePatterns / thresholds',
+      '初始版本：监控 Copilot Chat、Cline / Roo Code、终端输出',
+      '滑动窗口 + 静默超时状态机',
+      '声音 + 桌面通知 + 状态栏三通道提醒',
+      '一键接管：跳转最近改动 + AI 对话面板',
+      '活动历史侧边栏面板',
+      '可配置 watchPatterns / ignorePatterns / 阈值',
     ],
   },
 ];
