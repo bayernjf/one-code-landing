@@ -22,7 +22,7 @@ interface Props {
 const { title, description, lang, pathname, ogImage, faqSchema, extraSchema } = Astro.props;
 
 const segments = pathname.split('/').filter(Boolean);
-if (segments[0] === 'en') segments.shift();
+if (segments[0] === 'zh') segments.shift();
 const basePath = segments.length > 0 ? `/${segments.join('/')}` : '/';
 
 const canonical = `${SITE_URL.replace(/\/$/, '')}${pathname === '/' ? '/' : pathname}`;
@@ -104,7 +104,7 @@ const graphSchema = {
 
 <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
 <link rel="alternate" hreflang="en-US" href={enUrl} />
-<link rel="alternate" hreflang="x-default" href={zhUrl} />
+<link rel="alternate" hreflang="x-default" href={enUrl} />
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content={SITE_NAME} />
