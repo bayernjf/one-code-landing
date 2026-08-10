@@ -3,8 +3,8 @@
 
 export const SITE_URL = 'https://one-code-landing.pages.dev';
 export const SITE_NAME = 'AI Watchdog';
-export const SITE_TITLE = 'AI Watchdog — AI 编码工具状态监控与接管通知';
-export const SITE_TITLE_EN = 'AI Watchdog — Monitor AI Coding Agents & Get Notified to Take Over';
+export const SITE_TITLE = 'AI Watchdog | AI 编码工具状态监控与接管通知';
+export const SITE_TITLE_EN = 'AI Watchdog | Monitor AI Coding Agents & Get Notified to Take Over';
 export const SITE_DESCRIPTION =
   'AI Watchdog 是 VS Code 扩展，实时监控 AI 编码工具（Copilot Chat、Cline、终端）的工作状态，在 AI 完成任务或需要你接管时及时通知。声音 + 桌面通知 + 状态栏，一键跳回接管。';
 export const SITE_DESCRIPTION_EN =
