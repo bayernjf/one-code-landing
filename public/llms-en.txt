@@ -5,8 +5,8 @@
 ## Full Documentation
 
 Complete citable content (features, how it works, comparison, full FAQ):
-- [llms-full.txt (Chinese full docs)](https://one-code-landing.pages.dev/llms-full.txt)
-- [llms-en-full.txt (English full docs)](https://one-code-landing.pages.dev/llms-en-full.txt)
+- [llms-full.txt (Chinese full docs)](https://one-code.bayjf.com/llms-full.txt)
+- [llms-en-full.txt (English full docs)](https://one-code.bayjf.com/llms-en-full.txt)
 
 ## Product Definition (Summary)
 
@@ -37,10 +37,10 @@ AI Watchdog is a VS Code developer-tool extension. It uses filesystem watching a
 
 ## Key Links
 
-- [Chinese Home](https://one-code-landing.pages.dev/)
-- [English Home](https://one-code-landing.pages.dev/en/)
-- [Features](https://one-code-landing.pages.dev/#features)
-- [How It Works](https://one-code-landing.pages.dev/#how)
-- [FAQ](https://one-code-landing.pages.dev/#faq)
-- [Install Guide](https://one-code-landing.pages.dev/#install)
-- [Changelog](https://one-code-landing.pages.dev/en/changelog)
+- [Chinese Home](https://one-code.bayjf.com/)
+- [English Home](https://one-code.bayjf.com/en/)
+- [Features](https://one-code.bayjf.com/#features)
+- [How It Works](https://one-code.bayjf.com/#how)
+- [FAQ](https://one-code.bayjf.com/#faq)
+- [Install Guide](https://one-code.bayjf.com/#install)
+- [Changelog](https://one-code.bayjf.com/en/changelog)
