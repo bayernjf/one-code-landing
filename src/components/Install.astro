@@ -69,7 +69,13 @@ const methods = lang === 'zh' ? [
     <p class="mt-3 text-base text-ink-400">{t('install.subtitle')}</p>
   </div>
 
-  <div class="mt-12 grid gap-6 md:grid-cols-3">
+  <div class="mx-auto mt-8 max-w-2xl rounded-lg border border-brand-500/30 bg-brand-500/10 px-4 py-3 text-center text-sm text-brand-200">
+    {lang === 'zh'
+      ? '扩展市场即将上架，在此之前请使用 .vsix 手动安装。'
+      : 'Coming soon to the marketplace — until then, install the .vsix manually.'}
+  </div>
+
+  <div class="mt-8 grid gap-6 md:grid-cols-3">
     {methods.map((m) => (
       <div class="rounded-xl border border-ink-800 bg-ink-900/50 p-6">
         <h3 class="text-base font-semibold text-brand-400">{m.label}</h3>
@@ -88,12 +94,27 @@ const methods = lang === 'zh' ? [
 
   <div class="mt-8 text-center">
     <a
-      href={SOCIAL.marketplace}
+      data-download-vsix
+      href={SOCIAL.releases}
       target="_blank"
       rel="noopener"
       class="text-sm text-brand-400 underline underline-offset-2 hover:text-brand-300"
     >
-      {lang === 'zh' ? '在 VS Code Marketplace 查看 →' : 'View on VS Code Marketplace →'}
+      {lang === 'zh' ? '在 GitHub Releases 下载 .vsix →' : 'Download the .vsix from GitHub Releases →'}
     </a>
   </div>
 </section>
+
+<script>
+  import { fetchLatestAssets, formatBytes } from '@bay/landing-ui/lib/releases';
+
+  // 还没有 release 时保持兜底的 releases 页，发布后自动变成 .vsix 直链
+  const { assets } = await fetchLatestAssets('bayernjf/one-code', { vsix: '.vsix' });
+
+  if (assets.vsix) {
+    document.querySelectorAll('[data-download-vsix]').forEach((el) => {
+      el.setAttribute('href', assets.vsix!.url);
+      el.setAttribute('title', formatBytes(assets.vsix!.size));
+    });
+  }
+</script>
