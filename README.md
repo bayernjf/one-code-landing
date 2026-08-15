@@ -74,5 +74,5 @@ one-code-landing/
 
 ## 部署
 
-- `astro.config.mjs` 与 `src/consts.ts` 中的 `site` / `SITE_URL` 当前为占位域名 `https://one-code-landing.pages.dev`（Cloudflare Pages 风格），上线时需替换为实际域名（自定义域名或 `*.pages.dev`）。
+- `astro.config.mjs` 与 `src/consts.ts` 中的 `site` / `SITE_URL` 当前为占位域名 `https://one-code.bayjf.com`（Cloudflare Pages 风格），上线时需替换为实际域名（自定义域名或 `*.pages.dev`）。
 - 部署前运行 `npm run build`，产物目录为 `dist`。

@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
 // 占位域名：部署到 Cloudflare Pages 后替换为实际域名（自定义域名或 *.pages.dev）
-const SITE = 'https://one-code-landing.pages.dev';
+const SITE = 'https://one-code.bayjf.com';
 
 // https://astro.build/config
 export default defineConfig({
