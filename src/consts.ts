@@ -16,8 +16,8 @@ export const DEFAULT_LOCALE = 'en';
 // 社交与外部链接（部署后替换为实际仓库地址）
 export const SOCIAL = {
   github: 'https://github.com/bayernjf/one-code',
-  marketplace: 'https://marketplace.visualstudio.com/items?itemName=ai-watchdog.ai-watchdog',
-  email: 'hello@one-code.dev',
+  releases: 'https://github.com/bayernjf/one-code/releases',
+  email: 'b4yernjf@gmail.com',
 };
 
 // 默认 OG 图片
