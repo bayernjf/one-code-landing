@@ -1,5 +1,6 @@
 ---
 import SEO from '../components/SEO.astro';
+import MacInstallGuide from '../components/MacInstallGuide.astro';
 import { getLangFromUrl, useTranslations, type Lang } from '../i18n';
 import { SITE_TITLE, SITE_TITLE_EN, SITE_DESCRIPTION, SITE_DESCRIPTION_EN } from '../consts';
 import '../styles/global.css';
@@ -43,5 +44,6 @@ const pageDescription = description ?? (currentLang === 'zh' ? SITE_DESCRIPTION 
   </head>
   <body class="min-h-screen bg-ink-950 text-ink-100 antialiased">
     <slot />
+    <MacInstallGuide lang={currentLang} />
   </body>
 </html>
