@@ -8,19 +8,19 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const features = lang === 'zh' ? [
-  { icon: 'eye', title: '实时监控', desc: '同时监控 Copilot Chat、Cline / Roo Code、终端输出，掌握 AI 编码工具的一举一动。' },
+  { icon: 'eye', title: '跨产品监控', desc: '同时监控 VS Code、Cursor、Claude、终端等其他常见产品，一个监控器覆盖你所有的 AI 工作流。' },
   { icon: 'brain', title: '智能状态识别', desc: '滑动窗口 + 静默超时机制，准确区分"AI 工作中"与"已完成"，告别盲等。' },
-  { icon: 'bell', title: '多通道通知', desc: '提示音 + 桌面系统通知 + 状态栏图标，VS Code 不在前台也能收到提醒。' },
-  { icon: 'bolt', title: '一键接管', desc: '点击通知即跳转到最近改动的文件位置和 AI 对话面板，无缝继续工作。' },
-  { icon: 'history', title: '活动历史', desc: '侧边栏活动面板记录 AI 工作时间线，随时回溯发生了什么。' },
+  { icon: 'bell', title: '多通道通知', desc: '提示音 + 桌面系统通知 + 托盘图标，离开编辑器也能收到提醒。' },
+  { icon: 'bolt', title: '一键接管', desc: '点击通知即跳转到最近改动的文件位置，无缝继续工作。' },
+  { icon: 'history', title: '活动历史', desc: '活动时间线记录 AI 工作过程，随时回溯发生了什么。' },
   { icon: 'sliders', title: '可配置阈值', desc: '自由调整静默超时、活动阈值、窗口大小，匹配你的工作节奏。' },
 ] : [
-  { icon: 'eye', title: 'Real-time Monitoring', desc: 'Simultaneously monitors Copilot Chat, Cline / Roo Code, and terminal output, so you know what your AI agents are doing.' },
-  { icon: 'brain', title: 'Smart State Detection', desc: 'Sliding-window + silence-timeout mechanism accurately distinguishes "AI working" from "done": no more blind waiting.' },
-  { icon: 'bell', title: 'Multi-channel Alerts', desc: 'Sound + desktop notification + status bar icon, so you get notified even when VS Code is not in the foreground.' },
-  { icon: 'bolt', title: 'One-click Takeover', desc: 'Click the notification to jump to the latest file changes and the AI chat panel, and resume work seamlessly.' },
-  { icon: 'history', title: 'Activity History', desc: 'The sidebar activity panel records the AI work timeline, and trace back what happened at any time.' },
-  { icon: 'sliders', title: 'Configurable Thresholds', desc: 'Adjust silence timeout, activity threshold, and window size to match your workflow pace.' },
+  { icon: 'eye', title: 'Cross-Product Monitoring', desc: 'Monitor VS Code, Cursor, Claude and the terminal at once; one tool covers every AI workflow you run.' },
+  { icon: 'brain', title: 'Smart State Detection', desc: 'Sliding-window + silence-timeout mechanism distinguishes "AI working" from "done", so you stop guessing.' },
+  { icon: 'bell', title: 'Multi-Channel Alerts', desc: 'Sound + desktop notification + tray icon, so you get notified even away from the editor.' },
+  { icon: 'bolt', title: 'One-Click Takeover', desc: 'Click the notification to jump straight to the latest file changes and keep working.' },
+  { icon: 'history', title: 'Activity History', desc: 'A timeline of AI activity lets you retrace what happened at any time.' },
+  { icon: 'sliders', title: 'Configurable Thresholds', desc: 'Tune silence timeout, activity threshold and window size to match your rhythm.' },
 ];
 ---
 

@@ -8,58 +8,14 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-const methods = lang === 'zh' ? [
-  {
-    label: '扩展市场',
-    steps: [
-      '打开 VS Code',
-      '进入扩展面板（Ctrl+Shift+X / Cmd+Shift+X）',
-      '搜索 "AI Watchdog"',
-      '点击安装',
-    ],
-  },
-  {
-    label: '命令行',
-    steps: [
-      '打开终端',
-      '执行以下命令：',
-      'code --install-extension ai-watchdog.ai-watchdog',
-    ],
-  },
-  {
-    label: '.vsix 手动安装',
-    steps: [
-      '从 GitHub Releases 下载 .vsix',
-      'VS Code 扩展面板 → ... → 从 VSIX 安装',
-      '选择下载的 .vsix 文件',
-    ],
-  },
+const steps = lang === 'zh' ? [
+  '从 GitHub Releases 下载对应平台的安装包',
+  '打开应用，托盘出现 AI Watchdog 图标',
+  '在设置里勾选要监控的目标软件，即可开始',
 ] : [
-  {
-    label: 'Marketplace',
-    steps: [
-      'Open VS Code',
-      'Go to Extensions (Ctrl+Shift+X / Cmd+Shift+X)',
-      'Search "AI Watchdog"',
-      'Click Install',
-    ],
-  },
-  {
-    label: 'Command Line',
-    steps: [
-      'Open terminal',
-      'Run the following command:',
-      'code --install-extension ai-watchdog.ai-watchdog',
-    ],
-  },
-  {
-    label: '.vsix Manual',
-    steps: [
-      'Download .vsix from GitHub Releases',
-      'Extensions panel → ... → Install from VSIX',
-      'Select the downloaded .vsix file',
-    ],
-  },
+  'Download the installer for your platform from GitHub Releases',
+  'Open the app; the AI Watchdog tray icon appears',
+  'Tick the tools you want to watch in Settings, and you are set',
 ];
 ---
 
@@ -71,50 +27,77 @@ const methods = lang === 'zh' ? [
 
   <div class="mx-auto mt-8 max-w-2xl rounded-lg border border-brand-500/30 bg-brand-500/10 px-4 py-3 text-center text-sm text-brand-200">
     {lang === 'zh'
-      ? '扩展市场即将上架，在此之前请使用 .vsix 手动安装。'
-      : 'Coming soon to the marketplace — until then, install the .vsix manually.'}
+      ? '正式版即将发布。在此之前，可从 GitHub Releases 下载先行版本。'
+      : 'Public releases are coming soon. Until then, download an early build from GitHub Releases.'}
   </div>
 
-  <div class="mt-8 grid gap-6 md:grid-cols-3">
-    {methods.map((m) => (
-      <div class="rounded-xl border border-ink-800 bg-ink-900/50 p-6">
-        <h3 class="text-base font-semibold text-brand-400">{m.label}</h3>
-        <ol class="mt-4 space-y-2">
-          {m.steps.map((s) => (
-            <li class="text-sm leading-relaxed text-ink-300">
-              {s.startsWith('code --') ? (
-                <code class="font-mono text-xs text-brand-200 bg-ink-800 px-1.5 py-0.5 rounded">{s}</code>
-              ) : s}
-            </li>
-          ))}
-        </ol>
-      </div>
-    ))}
-  </div>
-
-  <div class="mt-8 text-center">
-    <a
-      data-download-vsix
-      href={SOCIAL.releases}
-      target="_blank"
-      rel="noopener"
-      class="text-sm text-brand-400 underline underline-offset-2 hover:text-brand-300"
-    >
-      {lang === 'zh' ? '在 GitHub Releases 下载 .vsix →' : 'Download the .vsix from GitHub Releases →'}
-    </a>
+  <div class="mx-auto mt-8 max-w-2xl rounded-xl border border-ink-800 bg-ink-900/50 p-6">
+    <p class="text-sm leading-relaxed text-ink-400">
+      {lang === 'zh'
+        ? 'AI Watchdog 是系统托盘常驻的桌面应用，跨 VS Code、Cursor、Claude、终端等其他常见产品统一监控。'
+        : 'AI Watchdog is a system-tray desktop app that monitors VS Code, Cursor, Claude, the terminal and other common tools in one place.'}
+    </p>
+    <ol class="mt-4 space-y-2">
+      {steps.map((s) => (
+        <li class="text-sm leading-relaxed text-ink-300">{s}</li>
+      ))}
+    </ol>
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+      <a
+        data-download="mac"
+        href={SOCIAL.releases}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex w-full items-center justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-600"
+      >
+        {lang === 'zh' ? '下载 macOS 安装包' : 'Download for macOS'}
+      </a>
+      <a
+        data-download="win"
+        href={SOCIAL.releases}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex w-full items-center justify-center rounded-lg border border-ink-700 px-4 py-2.5 text-sm font-medium text-ink-200 transition hover:border-ink-500 hover:text-white"
+      >
+        {lang === 'zh' ? '下载 Windows 安装包' : 'Download for Windows'}
+      </a>
+    </div>
   </div>
 </section>
 
 <script>
-  import { fetchLatestAssets, formatBytes } from '@bay/landing-ui/lib/releases';
+  import { fetchLatestAssets, formatBytes, detectPlatform } from '@bay/landing-ui/lib/releases';
 
-  // 还没有 release 时保持兜底的 releases 页，发布后自动变成 .vsix 直链
-  const { assets } = await fetchLatestAssets('bayernjf/one-code', { vsix: '.vsix' });
+  // 尚未发布对应安装包时，按钮保持指向 Releases 页；发布后自动替换为直链
+  const { assets } = await fetchLatestAssets('bayernjf/one-code', { mac: '.dmg', win: '.exe' });
 
-  if (assets.vsix) {
-    document.querySelectorAll('[data-download-vsix]').forEach((el) => {
-      el.setAttribute('href', assets.vsix!.url);
-      el.setAttribute('title', formatBytes(assets.vsix!.size));
-    });
+  const PRIMARY =
+    'inline-flex w-full items-center justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-600';
+  const SECONDARY =
+    'inline-flex w-full items-center justify-center rounded-lg border border-ink-700 px-4 py-2.5 text-sm font-medium text-ink-200 transition hover:border-ink-500 hover:text-white';
+
+  const macBtn = document.querySelector('[data-download="mac"]');
+  const winBtn = document.querySelector('[data-download="win"]');
+
+  const setStyle = (primaryBtn, secondaryBtn) => {
+    primaryBtn?.setAttribute('class', PRIMARY);
+    secondaryBtn?.setAttribute('class', SECONDARY);
+  };
+
+  const setHref = (btn, asset) => {
+    if (btn && asset) {
+      btn.setAttribute('href', asset.url);
+      btn.setAttribute('title', formatBytes(asset.size));
+    }
+  };
+
+  setHref(macBtn, assets.mac);
+  setHref(winBtn, assets.win);
+
+  // 根据访问者操作系统高亮主下载按钮；未知平台保持 macOS 为主
+  if (detectPlatform() === 'win') {
+    setStyle(winBtn, macBtn);
+  } else {
+    setStyle(macBtn, winBtn);
   }
 </script>
