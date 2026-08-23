@@ -8,18 +8,20 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const rows = lang === 'zh' ? [
+  { label: '跨产品监控（VS Code / Cursor / Claude / 终端等常见产品）', a: true, b: false, c: false },
   { label: '自动检测 AI 工作状态', a: true, b: false, c: false },
   { label: '任务完成时主动通知', a: true, b: false, c: false },
-  { label: '桌面通知（编辑器不在前台）', a: true, b: false, c: false },
+  { label: '桌面通知（应用不在前台）', a: true, b: false, c: false },
   { label: '声音提示', a: true, b: false, c: true },
   { label: '一键跳转最近改动', a: true, b: false, c: false },
   { label: '活动历史时间线', a: true, b: false, c: false },
   { label: '完全本地、不上传数据', a: true, b: true, c: true },
   { label: '可配置监控范围与阈值', a: true, b: false, c: false },
 ] : [
+  { label: 'Cross-product (VS Code / Cursor / Claude / terminal)', a: true, b: false, c: false },
   { label: 'Auto-detect AI working state', a: true, b: false, c: false },
   { label: 'Proactive notification on completion', a: true, b: false, c: false },
-  { label: 'Desktop notification (editor in background)', a: true, b: false, c: false },
+  { label: 'Desktop notification (app in background)', a: true, b: false, c: false },
   { label: 'Sound alert', a: true, b: false, c: true },
   { label: 'One-click jump to latest changes', a: true, b: false, c: false },
   { label: 'Activity history timeline', a: true, b: false, c: false },
