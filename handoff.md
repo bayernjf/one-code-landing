@@ -1,6 +1,6 @@
 # Handoff — one-code-landing
 
-更新时间：2026-08-23
+更新时间：2026-08-24
 
 ## 项目概况
 AI Watchdog 产品落地页。Astro 7 静态站点，中英双语（**英文根路径 + `/zh/`**），部署于 Cloudflare
@@ -26,7 +26,10 @@ Claude、终端统一监控。安装走 GitHub Releases 分发（.dmg / .exe）�
 - 部署：Cloudflare Pages 平台自动部署（push 即发），自定义域名 `one-code.bayjf.com`
 - 分发：GitHub Releases 自动更新链路已就绪（electron-updater）
 
+## 当前进度
+- 全部改动已提交并合入 `main`（PR #9），`dev` 与 `origin/main` 同步，工作区干净
+- macOS 安装引导（MacInstallGuide + 下载按钮去掉 target=_blank + i18n 文案）已上线
+
 ## 待办 / 注意
-- macOS 安装引导改动（MacInstallGuide + Install 移除 target=_blank + i18n 文案）已完成，**尚未 commit/push**
 - llms*.txt、README 已对齐当前产品与路由；后续改动若变更产品定位或 i18n 结构，需同步这 4 个 GEO 文件
 - 上架 Marketplace 前，`vsce package` 等发布流程尚未执行
