@@ -8,15 +8,15 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const steps = lang === 'zh' ? [
-  { num: '01', title: '探针监听', desc: '文件探针与进程探针监听 VS Code、Cursor、Claude、终端等其他常见产品，捕获 AI 活动信号。' },
-  { num: '02', title: '滑动窗口判定', desc: '在时间窗口内统计文件变更次数，达到阈值即判定为"AI 工作中"，实时反映状态。' },
-  { num: '03', title: '静默超时检测', desc: '当 AI 活动停止超过设定的静默超时（默认 8 秒），判定任务完成，触发通知。' },
-  { num: '04', title: '通知与接管', desc: '通过声音和桌面通知提醒你回来。点击通知一键跳转到最近改动位置。' },
+  { num: '01', title: '多路探针采集', desc: '六路探针并行采集 AI 活动信号：文件变更频率、进程存在、Shell Hook 命令包裹、Claude jsonl 追加、Codex rollout 生命周期事件、VS Code 伴侣 socket 深度上报。各探针按信号强度分级，强信号压制弱信号的误判。' },
+  { num: '02', title: '按来源聚合判定', desc: '聚合引擎按监控来源分组为独立状态机，多会话并行追踪互不干扰。滑动窗口统计文件变更（默认 3 秒 / 3 次）判定 working，静默超时（默认 8 秒）判定 done；最短工作时长门槛（默认 30 秒）过滤短任务，避免无效通知。' },
+  { num: '03', title: '智能过滤与分级', desc: '通知发送前经过多层过滤：勿扰模式（手动 / 定时静默 / 只通知 waiting）、仅失焦时弹桌面通知、按目标独立开关。waiting 状态不受最短时长门槛限制——被堵住时越早知道越好。' },
+  { num: '04', title: '多通道通知与接管', desc: '通过声音（done/waiting 不同音效）、桌面系统通知、托盘图标状态、远程渠道（Webhook / ntfy.sh）四通道提醒。通知正文含耗时与改动文件数，点击自动聚焦对应应用；活动历史持久化，统计仪表盘随时回溯。' },
 ] : [
-  { num: '01', title: 'Probes Watch', desc: 'File and process probes watch VS Code, Cursor, Claude and the terminal, capturing AI activity signals.' },
-  { num: '02', title: 'Sliding-Window Detection', desc: 'File changes are counted within a time window; reaching the threshold marks "AI working" in real time.' },
-  { num: '03', title: 'Silence Timeout', desc: 'When activity stops beyond the silence timeout (default 8s), the task is judged complete and a notification fires.' },
-  { num: '04', title: 'Notify & Take Over', desc: 'Sound and desktop notifications bring you back. Click to jump straight to the latest changes.' },
+  { num: '01', title: 'Multi-Probe Signal Collection', desc: 'Six probes collect AI activity signals in parallel: file-change frequency, process presence, Shell Hook command wrapping, Claude jsonl appends, Codex rollout lifecycle events, and VS Code companion socket deep reporting. Each probe declares its signal authority; strong signals suppress weak-signal false positives.' },
+  { num: '02', title: 'Source-Grouped Aggregation', desc: 'The aggregation engine groups state machines by monitor source, tracking multiple sessions in parallel without interference. A sliding window counts file changes (default 3s / 3 changes) to detect working, and silence timeout (default 8s) marks done. A minimum work-duration threshold (default 30s) filters short tasks to avoid noisy alerts.' },
+  { num: '03', title: 'Smart Filtering & Tiering', desc: 'Before dispatch, notifications pass through multi-layer filtering: Do Not Disturb (manual / scheduled quiet hours / notify-only-waiting), desktop alerts only when out of focus, and per-target independent toggles. The waiting state bypasses the minimum-duration threshold — when the AI is blocked, sooner is better.' },
+  { num: '04', title: 'Multi-Channel Notify & Takeover', desc: 'Alert through four channels: sound (different tones for done vs waiting), desktop system notifications, tray icon status, and remote channels (Webhook / ntfy.sh). Notification bodies include duration and changed-file count; clicking auto-focuses the corresponding app. Activity history is persisted and the stats dashboard is always available for review.' },
 ];
 ---
 
