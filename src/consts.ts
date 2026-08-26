@@ -3,12 +3,12 @@
 
 export const SITE_URL = 'https://one-code.bayjf.com';
 export const SITE_NAME = 'AI Watchdog';
-export const SITE_TITLE = 'AI Watchdog | 跨产品 AI 编码监控与接管通知';
-export const SITE_TITLE_EN = 'AI Watchdog | Monitor Every AI Coding Tool & Get Notified to Take Over';
+export const SITE_TITLE = 'AI Watchdog | 跨产品 AI 编码监控、多会话追踪与接管通知';
+export const SITE_TITLE_EN = 'AI Watchdog | Cross-Product AI Coding Monitor, Multi-Session Tracking & Takeover Alerts';
 export const SITE_DESCRIPTION =
-  'AI Watchdog 跨 VS Code、Cursor、Claude、终端等其他常见产品实时监控工作状态，在 AI 完成任务或需要你接管时通过声音 + 桌面通知及时提醒，一键跳回接管。免费、开源、完全本地运行。';
+  'AI Watchdog 是系统托盘常驻的桌面应用，通过 6 种探针跨 VS Code、Cursor、Claude、ChatGPT、终端统一监控 AI 编码状态。支持多会话并行追踪、勿扰模式、远程通知（Webhook/ntfy）、统计仪表盘与一键接管，完全本地运行，自动更新。';
 export const SITE_DESCRIPTION_EN =
-  'AI Watchdog monitors your AI coding tools across VS Code, Cursor, Claude and the terminal in real time, and notifies you to take over when work is done or input is needed. Sound + desktop notifications, one-click jump back. Free, open-source, fully local.';
+  'AI Watchdog is a system-tray desktop app that monitors AI coding across VS Code, Cursor, Claude, ChatGPT and the terminal through 6 probes. Features multi-session tracking, Do Not Disturb, remote notifications (Webhook/ntfy), a stats dashboard and one-click takeover. Fully local, auto-updating.';
 export const AUTHOR = 'AI Watchdog';
 export const LOCALES = ['zh', 'en'] as const;
 export const DEFAULT_LOCALE = 'en';
