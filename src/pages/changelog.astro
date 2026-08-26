@@ -9,15 +9,115 @@ const t = useTranslations(lang);
 
 const releases = [
   {
-    version: '0.1.0',
-    date: '2026-08-05',
+    version: '0.0.11',
+    date: '2026-08-26',
     notes: [
-      'Initial release: system-tray desktop app monitoring AI coding tools across products',
-      'File and process probes covering VS Code, Cursor, Claude, the terminal and other common tools',
-      'Sliding-window + silence-timeout state machine',
-      'Sound + desktop notification + tray triple-channel alerts',
-      'One-click takeover: jump to the latest changes',
-      'Configurable watch targets and sensitivity',
+      'CI/CD stability: replaced platform-specific build commands with cross-platform equivalents',
+      'Added release workflow concurrency control to prevent conflicting publish runs',
+    ],
+  },
+  {
+    version: '0.0.10',
+    date: '2026-08-26',
+    notes: [
+      'Multi-session state engine: aggregation refactored into source-grouped state machines, tracking multiple AI tasks in parallel without interference',
+      'Tray menu now shows each active session (source, status, elapsed time); tray title displays "Working (N)" when multiple tools run concurrently',
+      'Stats dashboard: today/this-week/all-time duration & task counts, 7-day daily trend, and per-tool usage distribution',
+      'Activity history: persistent timeline (last 200 entries) with source-based filtering',
+      'One-click takeover: notification click auto-focuses the corresponding app (VS Code / Claude / ChatGPT / Terminal)',
+      'Do Not Disturb: manual toggle, scheduled quiet hours, and "notify only waiting" tiering',
+      'Notification content enhancement: bodies now include task duration and changed-file count',
+      'Fine-grained notification control: done/waiting use different system sounds, desktop alerts fire only when out of focus, per-target independent toggles',
+      'Remote notifications: Webhook (compatible with Feishu/DingTalk/WeCom bots) and ntfy.sh channels',
+      'Custom watch targets: add tools beyond the built-in five via Settings',
+      'Login launch and global shortcut support',
+      'Minimum work-duration threshold (default 30s) to filter short-task notifications',
+    ],
+  },
+  {
+    version: '0.0.9',
+    date: '2026-08-25',
+    notes: [
+      'Process probe is now platform-aware: uses ps on macOS/Linux and tasklist on Windows',
+      'Gated short-task notifications behind a minimum work-duration threshold to reduce noise',
+    ],
+  },
+  {
+    version: '0.0.8',
+    date: '2026-08-25',
+    notes: [
+      'Added bash Shell Hook support for precise terminal command monitoring',
+      'Added fish Shell Hook support',
+      'Improved test robustness for shell hook syntax and behavior validation',
+    ],
+  },
+  {
+    version: '0.0.7',
+    date: '2026-08-25',
+    notes: [
+      'Fixed Claude Desktop probe replaying pre-existing session history on startup, which caused false notifications',
+    ],
+  },
+  {
+    version: '0.0.6',
+    date: '2026-08-25',
+    notes: [
+      'Introduced Signal Authority mechanism: strong signals (session probes) suppress weak-signal (heuristic) false-done judgments during active sessions',
+      'Unified source display names as the single source of truth for notification attribution',
+    ],
+  },
+  {
+    version: '0.0.5',
+    date: '2026-08-25',
+    notes: [
+      'Added Codex session probe: monitors ~/.codex/sessions rollout files for explicit task_started / task_complete / turn_aborted lifecycle events',
+      'One probe covers ChatGPT desktop app, VS Code openai.chatgpt extension, and codex CLI simultaneously',
+      'Concurrent turn tracking with Map counting; all turns complete before reporting done; 30-minute fallback cleanup for crashed hosts',
+    ],
+  },
+  {
+    version: '0.0.4',
+    date: '2026-08-25',
+    notes: [
+      'VS Code Companion mode: extension reports deep signals to the desktop daemon via a local Unix domain socket (token-authenticated, 0600 permissions)',
+      'State judgment, debounce and notifications remain on the daemon side; companion silently backs off when daemon is not running',
+      'Shallow monitoring (file/process probes) continues to work independently of the companion',
+    ],
+  },
+  {
+    version: '0.0.3',
+    date: '2026-08-24',
+    notes: [
+      'Added zsh Shell Hook: precise terminal command monitoring via precmd/preexec rc file snippets (idempotent install/uninstall from tray)',
+      'Added Claude Desktop session probe: detects ~/.claude/projects/*.jsonl appends with debounce',
+      'Added Phase 4 design documentation for the unified monitoring product direction',
+    ],
+  },
+  {
+    version: '0.0.2',
+    date: '2026-08-23',
+    notes: [
+      'Electron desktop app: system-tray resident with file probe (chokidar + sliding-window) and process probe (ps polling)',
+      'Aggregation engine with state machine, debounce, and minimum work-duration gating',
+      'Settings window (BrowserWindow + IPC) for target selection, sensitivity tuning, and deep-signal toggles',
+      'Workspace auto-discovery and config persistence (JSON in userData)',
+      'electron-builder packaging for macOS (dmg/zip) and Windows (NSIS exe)',
+      'electron-updater auto-update with full event flow, IPC integration, and settings-page update UI',
+      'GitHub Actions release workflow with automated version bumping and publishing',
+    ],
+  },
+  {
+    version: '0.0.1',
+    date: '2026-08-01',
+    notes: [
+      'Initial VS Code extension: monitors AI coding tools (Copilot Chat, Cline/Roo Code, terminal AI CLIs) work state',
+      'File-watcher sliding-window detection, terminal output keyword matching, Copilot extension state detection, Cline/Roo file monitoring',
+      'State machine (idle → working → done/waiting → idle) with activity log',
+      'Multi-channel notifications: status bar indicator, VS Code popup with action buttons, sound alerts, desktop notifications (out-of-focus only)',
+      'Activity sidebar TreeView panel and "one-click takeover" command to jump to latest changes',
+      '10+ configuration items for window size, activity threshold, silence timeout, and ignore patterns',
+      'esbuild build, TypeScript type-check (zero errors), ESLint (zero errors)',
+      'Unit tests covering state machine, sliding-window, path filtering, and duration formatting',
     ],
   },
 ];
