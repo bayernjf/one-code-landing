@@ -4,55 +4,75 @@
 
 AI Watchdog is a cross-product AI coding monitor desktop app (macOS / Windows) that lives in the system tray and watches the working state of AI coding tools, notifying you to take over at the right moment.
 
-It belongs to the developer-tools category. The core problem it solves: when AI coding assistants (such as Copilot, Cursor, Claude) are writing code automatically, developers often switch away to do other things — and they don't know when the AI finishes, whether it hit a problem, or whether human input is needed. AI Watchdog detects the AI's working state through file watching and process probing, and alerts the developer via sound, desktop notifications and the tray icon when it's time to take over.
+It belongs to the developer-tools category. The core problem it solves: when AI coding assistants (such as Copilot, Cursor, Claude, ChatGPT) are writing code automatically, developers often switch away to do other things — and they don't know when the AI finishes, whether it hit a problem, or whether human input is needed. AI Watchdog detects the AI's working state through six probes, supports multi-session parallel tracking, and alerts the developer via sound, desktop notifications, tray icon and remote channels when it's time to take over.
 
 ## How It Works
 
-### 1. Cross-Product Monitoring
+### 1. Multi-Probe Signal Collection
 
-AI Watchdog monitors several common AI coding tools (VS Code, Cursor, Claude, the terminal, etc.) at once — one monitor covers every AI workflow. Targets are ticked in the Settings window and toggled independently.
-
-It detects AI activity through two kinds of signals:
-- File watching: listens for changes within the watched directories
-- Process probing: polls the target software's process activity as a weak secondary signal
+AI Watchdog collects AI activity signals through six probes in parallel:
+- File probe: watches file-change frequency within watched directories (chokidar + sliding-window)
+- Process probe: polls target software process activity as a weak secondary signal (ps on macOS/Linux, tasklist on Windows)
+- Shell Hook: precisely captures terminal command start and end via zsh/bash/fish rc file snippets
+- Claude session probe: detects ~/.claude/projects/*.jsonl file appends to identify Claude Desktop activity
+- Codex session probe: monitors explicit task_started / task_complete / turn_aborted lifecycle events in ~/.codex/sessions rollout files — one probe covers ChatGPT desktop, VS Code openai.chatgpt extension, and codex CLI simultaneously
+- VS Code companion socket: extension reports deep signals to the daemon via a local Unix domain socket (token-authenticated)
 
 It ignores node_modules, .git, dist, build, .next, coverage, __pycache__, target directories by default.
 
-### 2. Sliding-Window State Detection
+### 2. Source-Grouped Aggregation
 
-The core detection mechanism is a sliding-window counter:
-- Within a time window (default 3 seconds), if file changes reach a threshold (default 3), the AI is judged "working"
-- When AI activity stops beyond a silence timeout (default 8 seconds), it is judged "done" and a notification fires
+The aggregation engine groups state machines by monitor source, tracking multiple sessions in parallel without interference:
+- Sliding window: within a time window (default 3s), if file changes reach a threshold (default 3), the AI is judged "working"
+- Silence timeout: when activity stops beyond the silence timeout (default 8s), it is judged "done"
+- Minimum work-duration threshold: default 30s; tasks shorter than the threshold only change state without firing a notification, avoiding noise (waiting state is exempt)
+- Signal authority: session probes (strong signals) suppress heuristic (weak-signal) false-done judgments during active sessions
 
-All thresholds (silence timeout, activity threshold, window size) are adjustable in the app's Settings window.
+All thresholds are adjustable in the Settings window.
 
-### 3. Multi-Channel Notifications
+### 3. Smart Filtering & Tiering
 
-When the AI state transitions to "done", AI Watchdog notifies via three channels:
-- Sound alert: adjustable volume
-- Desktop system notification: triggered when the app is not in the foreground, using OS-native notifications
-- Tray icon: reflects the current AI working state in real time
+Before dispatch, notifications pass through multi-layer filtering:
+- Do Not Disturb: manual toggle, scheduled quiet hours (e.g. 22:00–08:00), and "notify only waiting" tiering
+- Out-of-focus-only: desktop notifications are suppressed when the AI tool is in the foreground
+- Per-target independent toggles: each monitor target can disable notifications individually
+- Different system sounds for done vs waiting
 
-### 4. One-Click Takeover
+### 4. Multi-Channel Notify & Takeover
 
-When you receive a notification, clicking it automatically locates the most recently modified file so you can resume work quickly.
+Alerts the developer through four channels:
+- Sound alert: different tones for done/waiting, adjustable volume
+- Desktop system notification: fires when the app is out of focus; body shows task duration and changed-file count
+- Tray icon: reflects current state in real time; shows "Working (N)" when multiple tools run concurrently
+- Remote notifications: Webhook (compatible with Feishu/DingTalk/WeCom bots) and ntfy.sh — alerts even away from your desk
+
+Clicking a notification auto-focuses the corresponding app (VS Code / Claude / ChatGPT / Terminal) to resume work seamlessly.
 
 ## Monitored Tools
 
-- VS Code: monitors file operations by VS Code and its AI extensions
-- Cursor: monitors file operations in the Cursor editor
-- Claude: monitors activity in the Claude desktop app
-- Terminal: monitors terminal output changes
+- VS Code: file probe + VS Code companion socket deep signals
+- Cursor: file probe monitors file operations in the Cursor editor
+- Claude: Claude Desktop session jsonl probe
+- ChatGPT: Codex rollout lifecycle probe (covers desktop app, VS Code extension, CLI)
+- Terminal: Shell Hook (zsh/bash/fish) for precise command execution monitoring
+- Custom targets: add tools beyond the built-in five in Settings
 
 Each monitor can be toggled independently in Settings.
+
+## Activity History & Stats
+
+- Activity history: persists the last 200 entries (timestamp, state, signal source, duration) with source-based filtering
+- Stats dashboard: today/this-week/all-time duration and task counts, 7-day daily trend, per-tool usage distribution
 
 ## Privacy & Security
 
 AI Watchdog runs entirely locally:
 - No telemetry data collected
 - No file contents or paths uploaded
-- No network communication (apart from downloading the installer from GitHub Releases)
 - All state detection and notifications happen on the local machine
+- Remote notifications only send notification events to the user's own configured Webhook / ntfy addresses
+- Network communication is only used by electron-updater to check and download updates
+- The code is open-source and auditable
 
 ## Default Settings
 
@@ -61,33 +81,51 @@ AI Watchdog runs entirely locally:
 | Silence timeout | 8s | Wait time before judging the AI done |
 | Activity threshold | 3 | Changes in the window that trigger "working" |
 | Window size | 3s | Sliding window size |
-| Sound | On | Adjustable volume |
+| Minimum work duration | 30s | Tasks shorter than this don't notify (waiting exempt) |
+| Sound | On | Different tones for done/waiting, adjustable volume |
+| Activity history | 200 entries | Maximum persisted records |
 
 ## Installation
 
 1. Download the installer for your platform from GitHub Releases (macOS .dmg / Windows .exe)
-2. Open the app; the AI Watchdog tray icon appears
-3. Tick the tools you want to watch in Settings, and you are set
+2. Open the app; the AI Watchdog tray icon appears (on macOS, if first launch says "damaged" or "developer cannot be verified", run xattr -cr /Applications/AI\ Watchdog.app in Terminal to lift the Gatekeeper restriction)
+3. Tick the tools you want to watch in Settings, tune sensitivity, and you are set
+4. Built-in electron-updater checks for updates on launch and downloads them in the background
 
 ## FAQ
 
 Q: Which AI coding tools does AI Watchdog monitor?
-A: It monitors VS Code, Cursor, Claude, the terminal and other common products in one place. Each monitor can be toggled independently in the Settings window.
+A: Six probes provide coverage: file probe + process probe (generic, covers all AI tools), Shell Hook (zsh/bash/fish for precise terminal monitoring), Claude session jsonl (Claude Desktop), Codex rollout lifecycle (ChatGPT desktop / VS Code extension / CLI), and VS Code companion socket (deep signals). Built-in targets include VS Code, Cursor, Claude, ChatGPT and Terminal; you can also add custom targets.
 
-Q: Does it collect or upload my data?
-A: No. AI Watchdog runs entirely locally. All file-change monitoring, state detection and notifications happen on your machine — nothing is collected or uploaded.
+Q: What is multi-session parallel tracking?
+A: The aggregation engine groups state machines by monitor source, so Claude and ChatGPT running simultaneously do not interfere — each independently tracks working / done / waiting. The tray menu shows each active session's source, status and elapsed time; when concurrent, the tray title reads "Working (N)".
 
 Q: How does it detect whether the AI is working or done?
-A: Via a sliding-window mechanism: if file changes reach a threshold (default 3) within a time window (default 3 seconds), the AI is judged "working". When activity stops beyond a silence timeout (default 8 seconds), it is judged "done" and a notification fires.
+A: Via a sliding-window mechanism: if file changes reach a threshold (default 3) within a time window (default 3 seconds), the AI is judged "working". When activity stops beyond a silence timeout (default 8 seconds), it is judged "done". A minimum work-duration threshold (default 30s) ensures tasks shorter than the threshold only change state without firing a notification. The Codex probe uses explicit lifecycle events (task_started / task_complete), which is more precise than silence timeout.
 
 Q: What notification channels are available?
-A: Three channels: sound alert (adjustable volume), desktop system notification (when the app is not in the foreground), and tray icon status. Each can be toggled independently.
+A: Four channels: sound alert (different system tones for done vs waiting, adjustable volume), desktop system notification (fires only when the app is out of focus, body shows duration and changed-file count), tray icon status, and remote notifications (Webhook / ntfy.sh — alerts even away from your desk, compatible with Feishu/DingTalk/WeCom custom bots). Each watch target can toggle notifications independently.
 
-Q: Which platforms are supported?
-A: macOS (.dmg) and Windows (.exe). It works via file watching and process probing with negligible overhead, excluding node_modules, dist, .git and similar directories by default.
+Q: How does Do Not Disturb work?
+A: Three DND modes: manual toggle (one-click from the tray menu), scheduled quiet hours (e.g. 22:00–08:00 auto-silence), and tiered silence ("notify only waiting" — completion notifications are silenced, but you are still alerted when the AI waits for input and may be blocked). In DND, state still transitions normally; only notifications are suppressed.
 
-Q: How do I install it?
-A: Download the installer for your platform from GitHub Releases, open the app (tray icon appears), and tick the tools to watch in Settings.
+Q: How do I configure remote notifications?
+A: In Settings, configure a Webhook URL (POSTs JSON on done / waiting, compatible with Feishu/DingTalk/WeCom custom bots) or an ntfy.sh topic (install the ntfy app on your phone to receive pushes). Both channels can be toggled independently. All data remains processed locally; only notification events are sent to your configured address.
+
+Q: What is "one-click takeover"?
+A: When you receive a notification, clicking it auto-focuses the corresponding AI tool window (VS Code / Claude / ChatGPT / Terminal), bringing you back to your work context instantly. The notification body also shows task duration and changed-file count, so you know what the AI did before switching back.
+
+Q: What are activity history and the stats dashboard for?
+A: Activity history persists the last 200 entries (timestamp, state, signal source, duration) with source-based filtering, so you can always retrace what the AI did. The stats dashboard, built on history data, shows today/this-week/all-time duration and task counts, a 7-day daily trend, and usage distribution by tool — helping you quantify your AI usage habits.
+
+Q: Does it collect or upload my data?
+A: No. AI Watchdog runs entirely locally. All file-change monitoring, state detection, notifications and history happen on your machine; nothing is collected or uploaded. Remote notifications only send notification events to your own configured Webhook / ntfy address. The code is open-source and auditable.
+
+Q: Does it support auto-update?
+A: Yes. Built-in electron-updater checks GitHub Releases on launch and downloads updates in the background, applying them on next restart. Settings lets you view the current version, manually check for updates, and see the changelog.
 
 Q: Will it impact system performance?
-A: No. AI Watchdog uses lightweight file watching and sliding-window counting with minimal memory and CPU usage. It excludes node_modules, dist, .git and similar directories by default to avoid unnecessary overhead.
+A: No. AI Watchdog uses lightweight filesystem watchers (chokidar) and sliding-window counting with minimal memory and CPU usage. It excludes node_modules, dist, .git and similar directories by default to avoid unnecessary overhead. The process probe only polls ps / tasklist when needed.
+
+Q: How do I install it?
+A: Download the macOS installer (.dmg) or Windows installer (.exe) from GitHub Releases, open it, and the AI Watchdog tray icon appears. On macOS, if the first launch says "damaged" or "developer cannot be verified", run xattr -cr /Applications/AI\ Watchdog.app in Terminal to lift the Gatekeeper restriction. Then tick the tools you want to watch in Settings.

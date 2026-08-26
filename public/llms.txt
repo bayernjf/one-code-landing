@@ -1,6 +1,6 @@
 # AI Watchdog
 
-> AI Watchdog 是系统托盘常驻的桌面应用，跨 VS Code、Cursor、Claude、终端等其他常见产品统一监控 AI 编码工具的工作状态。当 AI 完成任务或需要你接管时，通过声音、桌面通知、托盘图标及时提醒。点击通知即可跳转到最近改动位置继续工作。免费、开源、完全本地运行，不上传任何数据。
+> AI Watchdog 是系统托盘常驻的桌面应用，通过六路探针跨 VS Code、Cursor、Claude、ChatGPT、终端统一监控 AI 编码状态。支持多会话并行追踪、勿扰模式、远程通知（Webhook/ntfy）、统计仪表盘与一键接管。AI 完成任务或需要你接管时立即提醒，点击通知聚焦对应应用。免费、开源、完全本地运行，内置自动更新。
 
 ## 完整文档
 
@@ -10,30 +10,33 @@
 
 ## 产品定义（摘要）
 
-AI Watchdog 属于开发者工具，是一款跨产品的 AI 编码监控桌面应用（macOS / Windows）。它通过文件监听和进程探针自动检测 AI 编码工具的工作状态（"AI 工作中" vs "已完成"），在任务完成或需要人工接管时通过声音、桌面通知和托盘图标提醒开发者。支持一键跳转到最近改动的文件位置继续工作。
+AI Watchdog 属于开发者工具，是一款跨产品的 AI 编码监控桌面应用（macOS / Windows）。它通过六路探针（文件探针、进程探针、Shell Hook、Claude 会话 jsonl、Codex rollout 生命周期、VS Code 伴侣 socket）自动检测 AI 编码工具的工作状态，支持多会话并行追踪。在任务完成或需要人工接管时通过声音、桌面通知、托盘图标和远程渠道提醒开发者。点击通知自动聚焦对应应用，活动历史与统计仪表盘随时回溯。
 
 ## 核心能力
 
-1. 跨产品监控：同时监控 VS Code、Cursor、Claude、终端等其他常见产品，一个监控器覆盖所有 AI 工作流
-2. 智能状态识别：滑动窗口 + 静默超时机制，准确区分"AI 工作中"与"已完成"
-3. 多通道通知：提示音 + 桌面系统通知 + 托盘图标，离开编辑器也能收到提醒
-4. 一键接管：点击通知即跳转到最近改动的文件位置，无缝继续工作
-5. 活动历史：活动时间线记录 AI 工作过程，随时回溯发生了什么
-6. 可配置阈值：自由调整静默超时、活动阈值、窗口大小，匹配工作节奏
+1. 六路探针跨产品覆盖：文件/进程/Shell Hook(zsh/bash/fish)/Claude jsonl/Codex rollout/VS Code 伴侣，覆盖 VS Code、Cursor、Claude、ChatGPT、终端及自定义目标
+2. 多会话并行追踪：按来源分组的状态机集合，同时追踪多个 AI 任务互不干扰，托盘显示活跃数
+3. 智能通知系统：勿扰模式（手动/定时/只通知 waiting）、仅失焦通知、按目标独立开关、done/waiting 不同音效
+4. 通知即洞察，一键接管：通知显示耗时与改动文件数，点击自动聚焦对应应用（VS Code/Claude/ChatGPT/终端）
+5. 活动历史与统计仪表盘：持久化时间线（200条）+ 来源筛选，统计今日/本周/累计时长、7天趋势、工具分布
+6. 远程通知 + 灵活可配：Webhook/ntfy.sh 双远程渠道，自定义监控目标，开机自启，全局快捷键，内置 electron-updater 自动更新
 
 ## 技术特征
 
 - 形态：系统托盘常驻桌面应用（macOS / Windows）
-- 运行方式：完全本地，不上传任何数据
-- 监控目标：VS Code、Cursor、Claude、终端及其他常见软件，可在设置中勾选
-- 平台支持：macOS（.dmg）、Windows（.exe）
-- 分发：GitHub Releases
+- 运行方式：完全本地，不上传任何数据；远程通知仅向用户配置的地址发送事件
+- 监控目标：VS Code、Cursor、Claude、ChatGPT、终端，支持添加自定义目标
+- 探针：文件探针（chokidar）、进程探针（ps/tasklist）、Shell Hook（zsh/bash/fish）、Claude 会话 jsonl、Codex rollout 生命周期、VS Code 伴侣 socket
+- 状态机：idle → working → done/waiting → idle，按来源分组多会话
+- 平台支持：macOS（.dmg，arm64）、Windows（.exe，NSIS）
+- 分发：GitHub Releases，内置 electron-updater 自动更新
+- 最短工作时长门槛：默认 30 秒，过滤短任务通知（waiting 不受限）
 
 ## 安装方式
 
 1. 从 [GitHub Releases](https://github.com/bayernjf/one-code/releases) 下载对应平台的安装包
-2. 打开应用，托盘出现 AI Watchdog 图标
-3. 在设置里勾选要监控的目标软件，即可开始
+2. 打开应用，托盘出现 AI Watchdog 图标（macOS 首次打开若提示「已损坏」，运行 xattr -cr 命令解除 Gatekeeper 限制）
+3. 在设置里勾选要监控的目标软件，调整灵敏度，即可开始
 
 ## 关键链接
 
