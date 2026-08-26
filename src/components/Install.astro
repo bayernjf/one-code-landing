@@ -9,13 +9,13 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const steps = lang === 'zh' ? [
-  '从 GitHub Releases 下载对应平台的安装包',
-  '打开应用，托盘出现 AI Watchdog 图标',
-  '在设置里勾选要监控的目标软件，即可开始',
+  '从 GitHub Releases 下载对应平台的安装包（macOS .dmg / Windows .exe）',
+  '打开应用，托盘出现 AI Watchdog 图标，内置 electron-updater 自动保持最新',
+  '在设置里勾选要监控的目标软件（VS Code / Cursor / Claude / ChatGPT / 终端 / 自定义），调整灵敏度，即可开始',
 ] : [
-  'Download the installer for your platform from GitHub Releases',
-  'Open the app; the AI Watchdog tray icon appears',
-  'Tick the tools you want to watch in Settings, and you are set',
+  'Download the installer for your platform from GitHub Releases (macOS .dmg / Windows .exe)',
+  'Open the app; the AI Watchdog tray icon appears. Built-in electron-updater keeps it current automatically',
+  'Tick the tools you want to watch in Settings (VS Code / Cursor / Claude / ChatGPT / Terminal / Custom), tune sensitivity, and you are set',
 ];
 ---
 
@@ -25,17 +25,11 @@ const steps = lang === 'zh' ? [
     <p class="mt-3 text-base text-ink-400">{t('install.subtitle')}</p>
   </div>
 
-  <div class="mx-auto mt-8 max-w-2xl rounded-lg border border-brand-500/30 bg-brand-500/10 px-4 py-3 text-center text-sm text-brand-200">
-    {lang === 'zh'
-      ? '正式版即将发布。在此之前，可从 GitHub Releases 下载先行版本。'
-      : 'Public releases are coming soon. Until then, download an early build from GitHub Releases.'}
-  </div>
-
   <div class="mx-auto mt-8 max-w-2xl rounded-xl border border-ink-800 bg-ink-900/50 p-6">
     <p class="text-sm leading-relaxed text-ink-400">
       {lang === 'zh'
-        ? 'AI Watchdog 是系统托盘常驻的桌面应用，跨 VS Code、Cursor、Claude、终端等其他常见产品统一监控。'
-        : 'AI Watchdog is a system-tray desktop app that monitors VS Code, Cursor, Claude, the terminal and other common tools in one place.'}
+        ? 'AI Watchdog 是系统托盘常驻的桌面应用，通过六路探针跨 VS Code、Cursor、Claude、ChatGPT、终端统一监控，支持多会话追踪、勿扰模式、远程通知与统计仪表盘。'
+        : 'AI Watchdog is a system-tray desktop app that monitors VS Code, Cursor, Claude, ChatGPT and the terminal through six probes. It supports multi-session tracking, Do Not Disturb, remote notifications and a stats dashboard.'}
     </p>
     <ol class="mt-4 space-y-2">
       {steps.map((s) => (

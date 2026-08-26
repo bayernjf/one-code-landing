@@ -8,20 +8,77 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const features = lang === 'zh' ? [
-  { icon: 'eye', title: '跨产品监控', desc: '同时监控 VS Code、Cursor、Claude、终端等其他常见产品，一个监控器覆盖你所有的 AI 工作流。' },
-  { icon: 'brain', title: '智能状态识别', desc: '滑动窗口 + 静默超时机制，准确区分"AI 工作中"与"已完成"，告别盲等。' },
-  { icon: 'bell', title: '多通道通知', desc: '提示音 + 桌面系统通知 + 托盘图标，离开编辑器也能收到提醒。' },
-  { icon: 'bolt', title: '一键接管', desc: '点击通知即跳转到最近改动的文件位置，无缝继续工作。' },
-  { icon: 'history', title: '活动历史', desc: '活动时间线记录 AI 工作过程，随时回溯发生了什么。' },
-  { icon: 'sliders', title: '可配置阈值', desc: '自由调整静默超时、活动阈值、窗口大小，匹配你的工作节奏。' },
+  {
+    icon: 'radar',
+    title: '六路探针，跨产品覆盖',
+    desc: '文件探针、进程探针、Shell Hook（zsh/bash/fish）、Claude 会话 jsonl、Codex rollout 生命周期、VS Code 伴侣 socket——六路信号覆盖 VS Code、Cursor、Claude、ChatGPT、终端，还可添加自定义目标。',
+  },
+  {
+    icon: 'layers',
+    title: '多会话并行追踪',
+    desc: '按来源分组的状态机集合，同时追踪多个 AI 任务互不干扰。托盘菜单展示每个活跃会话的来源、状态与已运行时长，并发时标题显示「工作中 (N)」。',
+  },
+  {
+    icon: 'bell',
+    title: '智能通知系统',
+    desc: '勿扰模式支持手动开关、定时静默时段与「只通知 waiting」分级；仅在应用失焦时弹桌面通知；每个监控目标可独立开关通知；done 与 waiting 使用不同系统声音。',
+  },
+  {
+    icon: 'bolt',
+    title: '通知即洞察，一键接管',
+    desc: '通知正文显示任务耗时与改动文件数，不再只是「完成了」。点击通知自动聚焦对应应用（VS Code / Claude / ChatGPT / 终端），无缝继续工作。',
+  },
+  {
+    icon: 'chart',
+    title: '活动历史与统计仪表盘',
+    desc: '持久化活动时间线（最近 200 条），支持按监控来源筛选。统计仪表盘展示今日/本周/累计工作时长与任务数、最近 7 天每日趋势、各工具使用时长分布。',
+  },
+  {
+    icon: 'globe',
+    title: '远程通知 + 灵活可配',
+    desc: 'Webhook 与 ntfy.sh 双远程渠道，离开电脑也能收到提醒（兼容飞书/钉钉/企微机器人）。支持自定义监控目标、灵敏度阈值、开机自启、全局快捷键，内置 electron-updater 自动更新。',
+  },
 ] : [
-  { icon: 'eye', title: 'Cross-Product Monitoring', desc: 'Monitor VS Code, Cursor, Claude and the terminal at once; one tool covers every AI workflow you run.' },
-  { icon: 'brain', title: 'Smart State Detection', desc: 'Sliding-window + silence-timeout mechanism distinguishes "AI working" from "done", so you stop guessing.' },
-  { icon: 'bell', title: 'Multi-Channel Alerts', desc: 'Sound + desktop notification + tray icon, so you get notified even away from the editor.' },
-  { icon: 'bolt', title: 'One-Click Takeover', desc: 'Click the notification to jump straight to the latest file changes and keep working.' },
-  { icon: 'history', title: 'Activity History', desc: 'A timeline of AI activity lets you retrace what happened at any time.' },
-  { icon: 'sliders', title: 'Configurable Thresholds', desc: 'Tune silence timeout, activity threshold and window size to match your rhythm.' },
+  {
+    icon: 'radar',
+    title: 'Six Probes, Cross-Product Coverage',
+    desc: 'File probe, process probe, Shell Hook (zsh/bash/fish), Claude session jsonl, Codex rollout lifecycle, and VS Code companion socket — six signal paths cover VS Code, Cursor, Claude, ChatGPT and the terminal, plus custom targets you add.',
+  },
+  {
+    icon: 'layers',
+    title: 'Multi-Session Parallel Tracking',
+    desc: 'A collection of state machines grouped by source tracks multiple AI tasks simultaneously without interference. The tray menu shows each active session\'s source, status and elapsed time; when concurrent, the title reads "Working (N)".',
+  },
+  {
+    icon: 'bell',
+    title: 'Smart Notification System',
+    desc: 'Do Not Disturb with manual toggle, scheduled quiet hours and "notify only waiting" tiering; desktop notifications fire only when the app is out of focus; each watch target has an independent notification toggle; done and waiting use different system sounds.',
+  },
+  {
+    icon: 'bolt',
+    title: 'Insightful Notifications, One-Click Takeover',
+    desc: 'Notification bodies show task duration and changed file count — not just "done". Click a notification to auto-focus the corresponding app (VS Code / Claude / ChatGPT / Terminal) and resume work seamlessly.',
+  },
+  {
+    icon: 'chart',
+    title: 'Activity History & Stats Dashboard',
+    desc: 'Persistent activity timeline (last 200 entries) with source-based filtering. The stats dashboard shows today/this week/all-time duration and task counts, a 7-day daily trend, and usage distribution by tool.',
+  },
+  {
+    icon: 'globe',
+    title: 'Remote Notifications & Fully Configurable',
+    desc: 'Dual remote channels — Webhook and ntfy.sh — so you get alerts even away from your desk (compatible with Feishu/DingTalk/WeCom bots). Add custom watch targets, tune sensitivity thresholds, enable login launch and global shortcuts. Built-in electron-updater keeps it current.',
+  },
 ];
+
+const iconPaths: Record<string, string> = {
+  radar: 'M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 016 6h-2a4 4 0 00-4-4V6zm-2 0v2a4 4 0 00-4 4H4a6 6 0 016-6z',
+  layers: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
+  bell: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
+  bolt: 'M13 10V3L4 14h7v7l9-11h-7z',
+  chart: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
+  globe: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+};
 ---
 
 <section id="features" class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
@@ -35,8 +92,7 @@ const features = lang === 'zh' ? [
       <div class="rounded-xl border border-ink-800 bg-ink-900/50 p-6 transition hover:border-brand-500/40">
         <div class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-500/10 text-brand-400">
           <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1 1 0 010-.644C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178a1 1 0 010 .644C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d={iconPaths[f.icon]} />
           </svg>
         </div>
         <h3 class="mt-4 text-lg font-semibold text-ink-50">{f.title}</h3>

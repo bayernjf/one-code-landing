@@ -1,6 +1,6 @@
 # AI Watchdog
 
-> AI Watchdog is a system-tray desktop app that monitors AI coding tools across VS Code, Cursor, Claude, the terminal and other common products in one place. When the AI finishes a task or needs you to take over, it alerts you with sound, desktop notifications and the tray icon. Click the notification to jump straight to the latest file changes. Free, open-source, fully local — no data is ever uploaded.
+> AI Watchdog is a system-tray desktop app that monitors AI coding across VS Code, Cursor, Claude, ChatGPT and the terminal through six probes. It tracks multiple sessions in parallel, supports Do Not Disturb, remote notifications (Webhook/ntfy), a stats dashboard and one-click takeover. When the AI finishes a task or needs you to take over, it alerts you instantly — click the notification to focus the corresponding app. Free, open-source, fully local, with built-in auto-update.
 
 ## Full Documentation
 
@@ -10,30 +10,33 @@ Complete citable content (product definition, how it works, configuration, full 
 
 ## Product Definition (Summary)
 
-AI Watchdog is a developer-tool cross-product AI coding monitor for macOS / Windows. It uses file watching and process probing to automatically detect the working state of AI coding tools ("AI working" vs "done") and alerts the developer with sound, desktop notifications and the tray icon when a task completes or human input is needed. Supports a one-click jump to the latest file changes so work continues seamlessly.
+AI Watchdog is a developer-tool cross-product AI coding monitor for macOS / Windows. It uses six probes (file probe, process probe, Shell Hook, Claude session jsonl, Codex rollout lifecycle, VS Code companion socket) to automatically detect the working state of AI coding tools, with multi-session parallel tracking. When a task completes or human input is needed, it alerts the developer via sound, desktop notifications, tray icon and remote channels. Clicking a notification auto-focuses the corresponding app; activity history and a stats dashboard are always available for review.
 
 ## Core Features
 
-1. Cross-product monitoring: monitor VS Code, Cursor, Claude, the terminal and other tools at once — one monitor covers every AI workflow
-2. Smart state detection: sliding-window + silence-timeout mechanism distinguishes "AI working" from "done", so you stop guessing
-3. Multi-channel alerts: sound + desktop notification + tray icon, so you get notified even away from the editor
-4. One-click takeover: click the notification to jump straight to the latest file changes and keep working
-5. Activity history: a timeline of AI activity lets you retrace what happened at any time
-6. Configurable thresholds: tune silence timeout, activity threshold and window size to fit your rhythm
+1. Six-probe cross-product coverage: file/process/Shell Hook(zsh/bash/fish)/Claude jsonl/Codex rollout/VS Code companion — covers VS Code, Cursor, Claude, ChatGPT, Terminal and custom targets
+2. Multi-session parallel tracking: source-grouped state machine collection tracks multiple AI tasks without interference; tray shows active count
+3. Smart notification system: Do Not Disturb (manual/scheduled/notify-only-waiting), out-of-focus-only alerts, per-target independent toggles, different sounds for done/waiting
+4. Insightful notifications & one-click takeover: notifications show duration and changed-file count; clicking auto-focuses the corresponding app (VS Code/Claude/ChatGPT/Terminal)
+5. Activity history & stats dashboard: persistent timeline (200 entries) + source filtering; stats for today/week/all-time duration, 7-day trend, tool distribution
+6. Remote notifications & fully configurable: dual remote channels (Webhook/ntfy.sh), custom watch targets, login launch, global shortcuts, built-in electron-updater auto-update
 
 ## Technical Details
 
 - Form: system-tray desktop app (macOS / Windows)
-- Runtime: fully local, no data is ever uploaded
-- Monitored targets: VS Code, Cursor, Claude, the terminal and other common tools, ticked in Settings
-- Platforms: macOS (.dmg), Windows (.exe)
-- Distribution: GitHub Releases
+- Runtime: fully local, no data uploaded; remote notifications only send events to user-configured addresses
+- Monitored targets: VS Code, Cursor, Claude, ChatGPT, Terminal, plus custom targets
+- Probes: file probe (chokidar), process probe (ps/tasklist), Shell Hook (zsh/bash/fish), Claude session jsonl, Codex rollout lifecycle, VS Code companion socket
+- State machine: idle → working → done/waiting → idle, source-grouped for multi-session
+- Platforms: macOS (.dmg, arm64), Windows (.exe, NSIS)
+- Distribution: GitHub Releases, built-in electron-updater auto-update
+- Minimum work-duration threshold: default 30s, filters short-task notifications (waiting exempt)
 
 ## Installation
 
 1. Download the installer for your platform from [GitHub Releases](https://github.com/bayernjf/one-code/releases)
-2. Open the app; the AI Watchdog tray icon appears
-3. Tick the tools you want to watch in Settings, and you are set
+2. Open the app; the AI Watchdog tray icon appears (on macOS, if first launch says "damaged", run xattr -cr to lift the Gatekeeper restriction)
+3. Tick the tools you want to watch in Settings, tune sensitivity, and you are set
 
 ## Key Links
 
